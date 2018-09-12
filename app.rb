@@ -1,11 +1,12 @@
 ##controller actions in here
 
 require_relative './config/init.rb'
-set :run, true
+# set :run, true
 
 get '/' do
   @name = "Bob Smith"
-  erb :"home" #erb > embedded ruby to render 
+  erb :"home"
+  #erb > embedded ruby to render 
 end
 
 # get '/date' do #will go to link
@@ -18,14 +19,13 @@ get '/signup' do
 end
 
 post '/signup' do
-	
 	user = User.new(params[:user])
 	if user.save
 		#redirect to login page
 		redirect :"/"
 	else
 		#redirect to signup page
-		redirect :"/sign_up"
+		redirect :"/signup"
 	end
 end
 
@@ -41,13 +41,12 @@ post '/login' do
 	# (valid-profile page) (invalid- relogin)
 	if @user && @user.authenticate(params[:password])
 		sign_in(user) #from session in helper
-		redirect user_path (@user)
-
+		redirect '/users/:id'
 	else
 		redirect '/login'
 	end
 
-  	erb :"/login"
+  	# erb :"/login"
 end
 
 
@@ -72,6 +71,41 @@ get'/logout' do
   # redirect
   redirect back
 end
+
+
+##questions section
+
+#list all
+get '/questions' do
+	@question = Question.all
+	erb :"questions/index" 
+end
+
+#create questions
+get '/questions/new' do
+	erb :"questions/new"
+end
+
+#post created questions based on id 
+post '/questions' do
+	@question = Question.create(question: params[:question])
+	#redirect to question page
+	redirect :"/questions/#{@question.id}"
+end 
+
+get '/questions/:id' do
+	question = Question.find_by(id: params[:id])
+	erb :"/questions/show"
+end
+
+#load edit form
+get '/questions/:id/edit' do
+	@question = Question.find_by(id: params[:id])
+	erb :"/questions/edit"
+
+
+
+
 
 
 
