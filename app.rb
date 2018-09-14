@@ -125,6 +125,39 @@ delete '/questions/:id/delete' do
 end
 
 
+##Answer sections
+
+#list all answer at index page
+get '/answers' do
+	@answer = Answer.all
+	erb :"answers/index" 
+end
+
+#create answer at new page
+get '/answers/new' do
+	@answer = Answer.new(params[:answer])
+	@answer.user_id = current_user.id
+	@answer.save
+	erb:"answers/new"
+end
+
+post '/answers' do
+
+end
+
+
+
+#edit answer
+get '/answers/:id/edit' do
+
+end
+
+# delete answer
+# delete '/answers/:id/delete' do
+# 	@answer =Answer.find_by(id: params[:id])
+# 	@answer.delete
+# 	redirect '/answers'
+# end
 
 
 
