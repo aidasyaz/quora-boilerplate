@@ -9,15 +9,20 @@
     <link rel="stylesheet" type="text/css" href="/css/application.css">
   </head>
   <body>
-
+      <a href="/">Home</a>
+      <!-- if user is logged in -->
     <%if logged_in? %>
-        <p>Welcome <%= current.user.email %></p>
+        <p>Welcome <%= current_user.email %></p>
         <a href="/users/<%= current_user.id %>">Profile</a>
         <a href="/logout">Log Out</a>
+        <!-- question index link -->
+        <a href="/questions">Question</a>
+        <a href="/answers">Answer</a>
       <%else%>
         <a href="/signup">Sign Up</a>
         <a href="/login">Log In</a>
-      <%end%>
+    <%end%>
+    
     <%= yield %>
 	
   </body>
