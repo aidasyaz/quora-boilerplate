@@ -135,22 +135,28 @@ end
 
 #create answer at new page
 get '/answers/new' do
-	@answer = Answer.new(params[:answer])
-	@answer.user_id = current_user.id
-	@answer.save
 	erb:"answers/new"
 end
 
+#create new answer
 post '/answers' do
+	@answer = Answer.new(params[:answer])
+	@answer.user_id = current_user.id
+	@answer.save
+	redirect "/questions/{question.id}"
+end
 
+#show answer based on id
+get '/questions/:id/' do
+	@answer = Answer.find_by(id: params[:id])
+	erb '/questions/show'
 end
 
 
+# #edit answer
+# get '/answers/:id/edit' do
 
-#edit answer
-get '/answers/:id/edit' do
-
-end
+# end
 
 # delete answer
 # delete '/answers/:id/delete' do

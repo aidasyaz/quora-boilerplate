@@ -1,0 +1,18 @@
+<!-- list out all questions -->
+<h1>Questions index page </h1>
+<!-- new question link-->
+<a href="/questions/new">New Question</a>
+
+<!-- loop through to create a list -->
+<% @question.each_with_index do |questions, index| %>
+<h4>
+	<a href="/questions/<%= questions.id %>">Question</a>
+	<%= index+1 %> <%= questions.title %> <%= questions.details %>
+</h4>
+<%end%>
+
+
+
+
+
+
