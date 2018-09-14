@@ -35,13 +35,12 @@ end
 
 post '/login' do
 	# 1. check if email exist
-	@user = User.find_by(email: params[:email])
-
+	@user = User.find_by(email: params[:user][:email])
 	# 2. check if can find user and if password is valid
 	# (valid-profile page) (invalid- relogin)
-	if @user && @user.authenticate(params[:password])
-		sign_in(user) #from session in helper
-		redirect '/users/:id'
+	if @user && @user.authenticate(params[:user][:password])
+		sign_in(@user) #from session in helper
+		redirect "/users/#{@user.id}"
 	else
 		redirect '/login'
 	end
@@ -86,15 +85,20 @@ get '/questions/new' do
 	erb :"questions/new"
 end
 
-#post created questions based on id 
+#post created questions based on id
+
 post '/questions' do
-	@question = Question.create(question: params[:question])
+
+	@question = Question.new(params[:question])
+	@question.user_id = current_user.id
+	@question.save
 	#redirect to question page
 	redirect :"/questions/#{@question.id}"
 end 
 
+#display id question on a page
 get '/questions/:id' do
-	question = Question.find_by(id: params[:id])
+	@question = Question.find_by(id: params[:id])
 	erb :"/questions/show"
 end
 
@@ -102,6 +106,25 @@ end
 get '/questions/:id/edit' do
 	@question = Question.find_by(id: params[:id])
 	erb :"/questions/edit"
+end
+
+#post edit action
+post '/questions/:id/edit' do
+	@question = Question.find_by(id: params[:id])
+	@question.title = params[:question]
+	@question.details = params[:question]
+	@question.save
+	redirect :"/questions/#{@question.id}"
+end
+
+#delete form
+delete '/questions/:id/delete' do
+	@question = Question.find_by(id: params[:id])
+	@question.destroy
+	redirect '/questions'
+end
+
+
 
 
 
